@@ -20,7 +20,7 @@ export const updateVideo = async (req, res, next) => {
     else {
       return next(createError(403, 'You are not authorized to update this video'));
     }
-  } catch (err) {
+  } catch(err) {
     next(err);
   }
 };
@@ -37,7 +37,7 @@ export const deleteVideo = async (req, res, next) => {
     else {
       return next(createError(403, 'You can not delete this video'));
     }
-  } catch (err) {
+  } catch(err) {
     next(err);
   }
 }
@@ -49,7 +49,47 @@ export const getVideo = async (req, res, next) => {
       return next(createError(404, 'Video not found'));
     }
     res.status(200).json(video);
+  } catch(err) {
+    next(err);
+  }
+}
+
+export const addVideo = async (req, res, next) => {
+  try {
+    await Video.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });    
+    res.status(200).json("The view has been added");
   } catch (err) {
+    next(err);
+  }
+}
+
+export const random = async (req, res, next) => {
+  try {
+    const videos = await Video.aggregate([ { $sample: { size: 40 } } ]);    
+    res.status(200).json(videos);
+  } catch(err) {
+    next(err);
+  }
+}
+
+export const trend = async (req, res, next) => {
+  try {
+    const videos = await Video.find().sort({views: -1});    
+    res.status(200).json(videos);
+  } catch(err) {
+    next(err);
+  }
+}
+
+export const sub = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id)   
+    const subscribedChannels = user.subscribedUsers
+    const list = Promise.all(subscribedChannels.map(async (channel) => {
+      const video = await Video.find({userId: channel})
+      return video
+    }
+  } catch(err) {
     next(err);
   }
 }
