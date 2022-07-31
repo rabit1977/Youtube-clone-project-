@@ -1,6 +1,6 @@
-import { createError } from "../error.js";
-import Comment from "../models/Comment.js";
-import Video from "../models/Video.js";
+import { createError } from '../error.js';
+import Comment from '../models/Comment.js';
+import Video from '../models/Video.js';
 
 export const addComment = async (req, res, next) => {
   const newComment = new Comment({ ...req.body, userId: req.user.id });
@@ -18,9 +18,9 @@ export const deleteComment = async (req, res, next) => {
     const video = await Video.findById(res.params.id);
     if (req.user.id === comment.userId || req.user.id === video.userId) {
       await Comment.findByIdAndDelete(req.params.id);
-      res.status(200).json("The comment has been deleted.");
+      res.status(200).json('The comment has been deleted.');
     } else {
-      return next(createError(403, "You can delete ony your comment!"));
+      return next(createError(403, 'You can delete only your comment!'));
     }
   } catch (err) {
     next(err);

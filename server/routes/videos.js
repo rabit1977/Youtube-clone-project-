@@ -1,36 +1,28 @@
 import express from 'express';
 import {
-  update,
-  deleteUser,
-  getUser,
-  subscribe,
-  unsubscribe,
-  like,
-  dislike,
-} from '../controllers/user.js';
+  addVideo,
+  addView,
+  getByTag,
+  getVideo,
+  random,
+  search,
+  sub,
+  trend,
+} from '../controllers/video.js';
 import { verifyToken } from '../verifyToken.js';
 
 const router = express.Router();
 
-//update user
-router.put('/:id', verifyToken, update);
-
-//delete user
-router.delete('/:id', verifyToken, deleteUser);
-
-//get a user
-router.get('/find/:id', getUser);
-
-//subscribe a user
-router.put('/sub/:id', verifyToken, subscribe);
-
-//unsubscribe a user
-router.put('/unsub/:id', verifyToken, unsubscribe);
-
-//like a video
-router.put('/like/:videoId', verifyToken, like);
-
-//dislike a video
-router.put('/dislike/:videoId', verifyToken, dislike);
+//create a video
+router.post('/', verifyToken, addVideo);
+router.put('/:id', verifyToken, addVideo);
+router.delete('/:id', verifyToken, addVideo);
+router.get('/find/:id', getVideo);
+router.put('/view/:id', addView);
+router.get('/trend', trend);
+router.get('/random', random);
+router.get('/sub', verifyToken, sub);
+router.get('/tags', getByTag);
+router.get('/search', search);
 
 export default router;
